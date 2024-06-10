@@ -59,17 +59,17 @@ const ProductDetailPage = () => {
         </div>
       ));
     } else if (localProduct.image) {
-      return (
-        <div>
+      return [
+        <div key={0}>
           <img src={localProduct.image} alt={`Product Image`} className="h-40 w-full object-cover mb-2" />
         </div>
-      );
+      ];
     } else {
-      return (
-        <div className="h-40 w-full bg-gray-200 mb-2 flex items-center justify-center">
+      return [
+        <div key={0} className="h-40 w-full bg-gray-200 mb-2 flex items-center justify-center">
           <span>No Image</span>
         </div>
-      );
+      ];
     }
   };
 
