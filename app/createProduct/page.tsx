@@ -35,16 +35,12 @@ const CreateProductPage = () => {
         price: parseFloat(price),
         category,
         description,
-        image: imageUrls[0],
+        image: imageUrls[0], 
       };
 
       createProduct(productData, {
         onSuccess: () => {
           alert('Product created successfully');
-          const storedProducts = localStorage.getItem('products');
-          const products = storedProducts ? JSON.parse(storedProducts) : [];
-          products.push({ ...productData, id: Date.now() }); 
-          localStorage.setItem('products', JSON.stringify(products));
           router.push('/'); 
         },
         onError: (error) => {
@@ -57,6 +53,7 @@ const CreateProductPage = () => {
       alert('Failed to upload images');
     }
   };
+
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold my-6">Create New Product</h1>

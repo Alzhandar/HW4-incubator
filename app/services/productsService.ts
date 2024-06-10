@@ -19,10 +19,11 @@ export const fetchProducts = async (): Promise<Product[]> => {
   return response.data;
 };
 
-export const fetchProductById = async (id: string | null): Promise<Product> => {
+export const fetchProductById = async (id: string | null): Promise<Product | null> => {
   if (!id) {
     throw new Error("Product ID is required");
   }
+
   const storedProducts = localStorage.getItem('products');
   if (storedProducts) {
     const products = JSON.parse(storedProducts);
@@ -31,8 +32,9 @@ export const fetchProductById = async (id: string | null): Promise<Product> => {
       return product;
     }
   }
+
   const response = await api.get(`/products/${id}`);
-  return response.data;
+  return response.data || null;
 };
 
 export const useProducts = () => {
@@ -40,7 +42,7 @@ export const useProducts = () => {
 };
 
 export const useProductById = (id: string | null) => {
-  return useQuery<Product, Error>(['product', id], () => fetchProductById(id), { enabled: !!id });
+  return useQuery<Product | null, Error>(['product', id], () => fetchProductById(id), { enabled: !!id });
 };
 
 export const createProduct = async (productData: any): Promise<Product> => {
@@ -50,6 +52,7 @@ export const createProduct = async (productData: any): Promise<Product> => {
 
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
+
   return useMutation(createProduct, {
     onSuccess: () => {
       queryClient.invalidateQueries('products');
@@ -60,12 +63,14 @@ export const useCreateProduct = () => {
 export const uploadImage = async (imageFile: File): Promise<{ location: string }> => {
   const formData = new FormData();
   formData.append('file', imageFile);
+
   try {
     const response = await axios.post('https://api.escuelajs.co/api/v1/files/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
+
     return response.data;
   } catch (error) {
     console.error('Error uploading image:', error);
