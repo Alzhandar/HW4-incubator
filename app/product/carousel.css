@@ -1,0 +1,22 @@
+.carousel .slide img {
+    width: auto;
+    max-height: 600px;
+    margin: 0 auto;
+  }
+  
+  .carousel .control-arrow,
+  .carousel.carousel-slider .control-arrow {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  .carousel .control-next.control-arrow::before,
+  .carousel .control-prev.control-arrow::before {
+    border-top-color: #fff;
+    border-right-color: #fff;
+  }
+  
+  .carousel .control-dots .dot {
+    background: #fff;
+    box-shadow: none;
+  }
+  

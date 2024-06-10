@@ -16,7 +16,12 @@ const CreateProductPage = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setImageFiles(Array.from(e.target.files));
+      const filesArray = Array.from(e.target.files);
+      if (filesArray.length > 8) {
+        alert('You can upload a maximum of 8 images');
+        return;
+      }
+      setImageFiles(filesArray);
     }
   };
 
@@ -35,12 +40,18 @@ const CreateProductPage = () => {
         price: parseFloat(price),
         category,
         description,
-        image: imageUrls[0], 
+        images: imageUrls, 
       };
 
       createProduct(productData, {
         onSuccess: () => {
           alert('Product created successfully');
+          const storedProducts = localStorage.getItem('products');
+          const products = storedProducts ? JSON.parse(storedProducts) : [];
+          products.push({ ...productData, id: Date.now() }); 
+          localStorage.setItem('products', JSON.stringify(products));
+          console.log('Product saved to localStorage:', productData);
+
           router.push('/'); 
         },
         onError: (error) => {
@@ -98,7 +109,7 @@ const CreateProductPage = () => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">Images</label>
+          <label className="block text-sm font-medium">Images (max 8)</label>
           <input
             type="file"
             multiple
